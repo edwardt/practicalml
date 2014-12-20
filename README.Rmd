@@ -1,0 +1,33 @@
+### Executive Summary
+Research, evaluate and apply machine learning to predict the manner in which participants did the exercise from Human Activity Recognition(HAR) data set from Groupware (See reference)
+
+## Data source
+groupware@les(http://groupware.les.inf.puc-rio.br/har) pis the data provider. The training data set is here (https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv).
+The test data is here(https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv)
+
+``` {r, getdata, echo=TRUE, eval=FALSE}
+train.url <- 'https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv'
+test.url <- 'https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv'
+download.file(train.url, paste('./data/','pml-training.csv',sep=''), method='wget')
+download.file(test.url, paste('./data/','pml-testing.csv', sep=''),     method='wget')
+
+```
+
+## Data Cleanse
+
+
+
+## Exploratory Analysis
+
+
+
+## Machine Learning Method
+
+
+## Diagnosis and Evaluation
+
+
+## Reference
+* groupware@les (http://groupware.les.inf.puc-rio.br/har)
+* Wearable Computing: Accelerometers’ Data
+Classification of Body Postures and Movements (http://groupware.les.inf.puc-rio.br/public/papers/2012.Ugulino.WearableComputing.HAR.Classifier.RIBBON.pdf)
