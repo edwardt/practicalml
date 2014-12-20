@@ -21,7 +21,7 @@ rm(list=ls())
 traindata <- read.csv(file='data/pml-training.csv', header=T, stringsAsFactors=TRUE, na.strings=c("NA", "", "#DIV/0!"))
 result<-traindata$classe
 testdata <- read.csv(file='data/pml-testing.csv', header=T, stringsAsFactors=TRUE, na.strings=c("NA", "", "#DIV/0!"))
-#
+
 ``` 
 Find out which columns are empty(NA, null, DIV/0) or mostly empty and remove them. Replace empty entries with mean for "not so empty columns". Mostly empty columns as morethan 45% empty.
 ``` {r, cleansedata, echo=TRUE, eval=TRUE}
@@ -43,9 +43,9 @@ traindata <- traindata[,-redudantcols]
 # intersection of column names from train and test data
 cmn <- intersect(names(traindata),names(testdata))
 traindata <- traindata[,cmn]
-testdata <- traindata[,cmn]
+testdata <- traindata[, cmn]
 traindata <- traindata[,-c(which(colnames(traindata)=='X'))]
-testdata <- traindata[,-c(which(colnames(testdata)=='X'))]
+testdata <- testdata[,-c(which(colnames(testdata)=='X'))]
 # add back the result
 traindata$classe<-result
 ``` 
@@ -101,10 +101,11 @@ confusionMatrix(predict(random.forest,
 
 plot(varImp(random.forest))
 ```
-Kappa statistic of  0.9843  reflects the out-of-sample error.
-Accuracy : 0.9876          
-95% CI : (0.9844, 0.9903)
-P-Value [Acc > NIR] : < 2.2e-16 
+Overall Statistics
+Accuracy : 0.9874          
+95% CI : (0.9842, 0.9901)
+P-Value [Acc > NIR] : < 2.2e-16       
+Kappa : 0.9841          
 
 ## Prediction on TestData
 ``` {r, predict, echo=TRUE, eval=TRUE}
