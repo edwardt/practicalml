@@ -53,22 +53,32 @@ traindata$classe<-result
 "Training data" into local train and local test data sets for buildig model.
 We use a 70, 30 split.
 ``` {r, partitiondata, echo=TRUE, eval=TRUE}
-library(caret)
+require(caret) || install.packages(caret)
 set.seed(12312014)
 trainingIndex  <- createDataPartition(traindata$classe, p=.70, list=FALSE)
 training.train <- traindata[ trainingIndex,]
 training.test  <- traindata[-trainingIndex,]
 ``` 
 ## Exploratory Analysis
-Plot variables
+Find out which factors are strongly correlated to each orderby some plotting
+Plot variables. To reduce dimension and give up accuracy in order to speed up
+calculation, remove factors that are at least 0.7 correlated.
 ``` {r, exploredata, echo=TRUE, eval=TRUE}
+require(caret) || install.packages(caret)
+require(corrplot) || install.packages(corrplot)
+require(kernlab) || install.packages(kernlab)
+require(knitr) || install.packages(knitr)
+require(randomForest) || install.packages(randomForest)
+correlMatrix <- cor(training.train[, -length(training.train)])
+corrplot(correlMatrix, order = "hclust", method = "circle", type = "lower", tl.cex = 0.8,  tl.col = rgb(0, 0, 0))
+highlyCor <- findCorrelation(correlMatrix, 0.70)
+training.train <- training.train[, -highlyCor]
 
 
 ``` 
 ## Machine Learning Method
 
 ``` {r, machinelearn, echo=TRUE, eval=TRUE}
-library(randomForest)
 random.forest <- train(training.train[,-c(which(colnames(traindata)=='classe'))],
                        training.train$classe,
                        tuneGrid=data.frame(mtry=3),
