@@ -19,7 +19,8 @@ Also participants names, timestamps and windows are not from device, so remove t
 ``` {r, loaddata, echo=TRUE, eval=TRUE}
 rm(list=ls())
 traindata <- read.csv(file='data/pml-training.csv', header=T, stringsAsFactors=FALSE, na.strings=c("NA", "", "#DIV/0!"))
-#testdata <- read.csv(file='data/pml-testing.csv', header=T, stringsAsFactors=FALSE, na.strings=c("NA", "", "#DIV/0!"))
+result<-traindata$classe
+testdata <- read.csv(file='data/pml-testing.csv', header=T, stringsAsFactors=FALSE, na.strings=c("NA", "", "#DIV/0!"))
 #
 ``` 
 Find out which columns are empty(NA, null, DIV/0) or mostly empty and remove them. Replace empty entries with mean for "not so empty columns". Mostly empty columns as morethan 45% empty.
@@ -36,27 +37,39 @@ emptycol <- function(x) {
 mostlyemptycols <- sapply(traindata, FUN=emptycol)
 traindata<-traindata[,-which(mostlyemptycols>0.45)]
 # remove names, timestamp etc
-traindata <- traindata[,-c(1:7)]
-cleancols <- names(traindata)
+redudantcols <- c(which(colnames(traindata)=='user_name'),
+which(colnames(traindata)=='raw_timestamp_part_1'),which(colnames(traindata)=='raw_timestamp_part_2'),which(colnames(traindata)=='cvtd_timestamp'),which(colnames(traindata)=='new_window'),which(colnames(traindata)=='num_window'))
+traindata <- traindata[,-redudantcols]
 # intersection of column names from train and test data
 cmn <- intersect(names(traindata),names(testdata))
-
-
-
-
+traindata <- traindata[,cmn]
+testdata <- traindata[,cmn]
+traindata <- traindata[,-c(which(colnames(traindata)=='X'))]
+testdata <- traindata[,-c(which(colnames(testdata)=='X'))]
+# add back the result
+traindata$classe<-result
 ``` 
-
-
+"Test data" set from groupware is for evaluation of final model. We partion the 
+"Training data" into local train and local test data sets for buildig model.
+We use a 70, 30 split.
+``` {r, partitiondata, echo=TRUE, eval=TRUE}
+library(caret)
+set.seed(12312014)
+trainingIndex  <- createDataPartition(traindata$classe, p=.70, list=FALSE)
+training.train <- traindata[ trainingIndex,]
+training.test  <- traindata[-trainingIndex,]
+``` 
 ## Exploratory Analysis
-
+Plot variables
 ``` {r, exploredata, echo=TRUE, eval=TRUE}
+
 
 ``` 
 ## Machine Learning Method
 
 ``` {r, machinelearn, echo=TRUE, eval=TRUE}
 library(randomForest)
-random.forest <- train(training.train[,-57],
+random.forest <- train(training.train[,which(colnames(traindata)=='classe')],
                        training.train$classe,
                        tuneGrid=data.frame(mtry=3),
                        trControl=trainControl(method="none")
