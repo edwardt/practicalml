@@ -13,16 +13,34 @@ download.file(test.url, paste('./data/','pml-testing.csv', sep=''),     method='
 
 ```
 
-## Data Cleanse
+## Data Cleansee
+Eye balling dataset shows 'NA', "", and "#DIV/0!" are empty data. Lots of empty or mostly empty columns.
+Also participants names, timestamps and windows are not from device, so remove those columnes.
 ``` {r, loaddata, echo=TRUE, eval=TRUE}
 rm(list=ls())
-traindata <- read.csv(file='data/pml-training.csv', header=T, stringsAsFactors=FALSE)
+traindata <- read.csv(file='data/pml-training.csv', header=T, stringsAsFactors=FALSE, na.strings=c("NA", "", "#DIV/0!"))
+#testdata <- read.csv(file='data/pml-testing.csv', header=T, stringsAsFactors=FALSE, na.strings=c("NA", "", "#DIV/0!"))
+#
 ``` 
-Find out which columns are empty(NA, null, DIV/0) or mostly empty and remove them. Replace empty entries with mean for "not so empty columns"
+Find out which columns are empty(NA, null, DIV/0) or mostly empty and remove them. Replace empty entries with mean for "not so empty columns". Mostly empty columns as morethan 45% empty.
 ``` {r, cleansedata, echo=TRUE, eval=TRUE}
+emptycols <- sapply(traindata, function(x)all(is.na(x)))
+emptycols <- which(emptycols)
+#remove all empty columns
+traindata<-traindata[,-which(emptycols)]
+#remove mostly empty columns
+emptycol <- function(x) {
+    numMissing <-length(which(is.na(x)))
+    numCells <- length(x)
+    numMissing/numCells
+}
+mostlyemptycols <- sapply(traindata, FUN=emptycol)
+
+
 nrow(is.na(traindata))
-ncol(is.na(traindata))
+ncol(is.na(traindata)==TRUE)
 mydata[!complete.cases(mydata),]
+training <- training[,-c(1:6)]
 ``` 
 
 
