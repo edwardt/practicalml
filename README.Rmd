@@ -101,11 +101,10 @@ confusionMatrix(predict(random.forest,
 
 plot(varImp(random.forest))
 ```
-Overall Statistics
 Accuracy : 0.9874          
 95% CI : (0.9842, 0.9901)
 P-Value [Acc > NIR] : < 2.2e-16       
-Kappa : 0.9841          
+Kappa : 0.9841         
 
 ## Prediction on TestData
 ``` {r, predict, echo=TRUE, eval=TRUE}
