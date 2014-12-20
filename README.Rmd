@@ -25,7 +25,6 @@ traindata <- read.csv(file='data/pml-training.csv', header=T, stringsAsFactors=F
 Find out which columns are empty(NA, null, DIV/0) or mostly empty and remove them. Replace empty entries with mean for "not so empty columns". Mostly empty columns as morethan 45% empty.
 ``` {r, cleansedata, echo=TRUE, eval=TRUE}
 emptycols <- sapply(traindata, function(x)all(is.na(x)))
-emptycols <- which(emptycols)
 #remove all empty columns
 traindata<-traindata[,-which(emptycols)]
 #remove mostly empty columns
@@ -35,12 +34,16 @@ emptycol <- function(x) {
     numMissing/numCells
 }
 mostlyemptycols <- sapply(traindata, FUN=emptycol)
+traindata<-traindata[,-which(mostlyemptycols>0.45)]
+# remove names, timestamp etc
+traindata <- traindata[,-c(1:7)]
+cleancols <- names(traindata)
+# intersection of column names from train and test data
+cmn <- intersect(names(traindata),names(testdata))
 
 
-nrow(is.na(traindata))
-ncol(is.na(traindata)==TRUE)
-mydata[!complete.cases(mydata),]
-training <- training[,-c(1:6)]
+
+
 ``` 
 
 
