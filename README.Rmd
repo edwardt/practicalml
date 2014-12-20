@@ -14,7 +14,16 @@ download.file(test.url, paste('./data/','pml-testing.csv', sep=''),     method='
 ```
 
 ## Data Cleanse
-
+``` {r, getdata, echo=TRUE, eval=TRUE}
+rm(list=ls())
+traindata <- read.csv(file='data/pml-training.csv', header=T, stringsAsFactors=FALSE)
+``` 
+Some Missing Data
+``` {r, getdata, echo=TRUE, eval=TRUE}
+nrow(is.na(traindata))
+ncol(is.na(traindata))
+mydata[!complete.cases(mydata),]
+``` 
 
 
 ## Exploratory Analysis
