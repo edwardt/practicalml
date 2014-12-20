@@ -18,9 +18,9 @@ Eye balling dataset shows 'NA', "", and "#DIV/0!" are empty data. Lots of empty 
 Also participants names, timestamps and windows are not from device, so remove those columnes.
 ``` {r, loaddata, echo=TRUE, eval=TRUE}
 rm(list=ls())
-traindata <- read.csv(file='data/pml-training.csv', header=T, stringsAsFactors=FALSE, na.strings=c("NA", "", "#DIV/0!"))
+traindata <- read.csv(file='data/pml-training.csv', header=T, stringsAsFactors=TRUE, na.strings=c("NA", "", "#DIV/0!"))
 result<-traindata$classe
-testdata <- read.csv(file='data/pml-testing.csv', header=T, stringsAsFactors=FALSE, na.strings=c("NA", "", "#DIV/0!"))
+testdata <- read.csv(file='data/pml-testing.csv', header=T, stringsAsFactors=TRUE, na.strings=c("NA", "", "#DIV/0!"))
 #
 ``` 
 Find out which columns are empty(NA, null, DIV/0) or mostly empty and remove them. Replace empty entries with mean for "not so empty columns". Mostly empty columns as morethan 45% empty.
