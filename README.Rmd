@@ -73,13 +73,14 @@ correlMatrix <- cor(training.train[, -length(training.train)])
 corrplot(correlMatrix, order = "hclust", method = "circle", type = "lower", tl.cex = 0.8,  tl.col = rgb(0, 0, 0))
 highlyCor <- findCorrelation(correlMatrix, 0.70)
 training.train <- training.train[, -highlyCor]
-
+training.test  <- training.test[, -highlyCor] 
+testdata <- testdata[, -highlyCor]
 
 ``` 
 ## Machine Learning Method
 
 ``` {r, machinelearn, echo=TRUE, eval=TRUE}
-random.forest <- train(training.train[,-c(which(colnames(traindata)=='classe'))],
+random.forest <- train(training.train[,-c(which(colnames(training.train)=='classe'))],
                        training.train$classe,
                        tuneGrid=data.frame(mtry=3),
                        trControl=trainControl(method="none")
@@ -93,15 +94,31 @@ summary(random.forest)
 
 # confusion matrix
 confusionMatrix(predict(random.forest,
-                        newdata=training.test[,-c(which(colnames(traindata)=='classe'))]
+                        newdata=training.test[,-c(which(colnames(training.test)=='classe'))]
                 ),
                 training.test$classe
                 )
 
 plot(varImp(random.forest))
 ```
-## Prediction on TestData
+Kappa statistic of  0.9843  reflects the out-of-sample error.
+Accuracy : 0.9876          
+95% CI : (0.9844, 0.9903)
+P-Value [Acc > NIR] : < 2.2e-16 
 
+## Prediction on TestData
+``` {r, predict, echo=TRUE, eval=TRUE}
+result <-predict(random.forest, testdata)
+pml_write_files <- function(x){
+  n = length(x)
+  for(i in 1:n){
+    filename = paste0("problem_id_",i,".txt")
+    write.table(x[i],file=filename,quote=FALSE,row.names=FALSE,col.names=FALSE)
+  }
+}
+
+pml_write_files(result)
+```
 ## Reference
 * groupware@les (http://groupware.les.inf.puc-rio.br/har)
 * Wearable Computing: Accelerometers’ Data
