@@ -14,12 +14,12 @@ download.file(test.url, paste('./data/','pml-testing.csv', sep=''),     method='
 ```
 
 ## Data Cleanse
-``` {r, getdata, echo=TRUE, eval=TRUE}
+``` {r, loaddata, echo=TRUE, eval=TRUE}
 rm(list=ls())
 traindata <- read.csv(file='data/pml-training.csv', header=T, stringsAsFactors=FALSE)
 ``` 
 Find out which columns are empty(NA, null, DIV/0) or mostly empty and remove them. Replace empty entries with mean for "not so empty columns"
-``` {r, getdata, echo=TRUE, eval=TRUE}
+``` {r, cleansedata, echo=TRUE, eval=TRUE}
 nrow(is.na(traindata))
 ncol(is.na(traindata))
 mydata[!complete.cases(mydata),]
@@ -28,12 +28,12 @@ mydata[!complete.cases(mydata),]
 
 ## Exploratory Analysis
 
-``` {r, getdata, echo=TRUE, eval=TRUE}
+``` {r, exploredata, echo=TRUE, eval=TRUE}
 
 ``` 
 ## Machine Learning Method
 
-``` {r, getdata, echo=TRUE, eval=TRUE}
+``` {r, machinelearn, echo=TRUE, eval=TRUE}
 library(randomForest)
 random.forest <- train(training.train[,-57],
                        training.train$classe,
