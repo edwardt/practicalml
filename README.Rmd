@@ -69,7 +69,7 @@ Plot variables
 
 ``` {r, machinelearn, echo=TRUE, eval=TRUE}
 library(randomForest)
-random.forest <- train(training.train[,which(colnames(traindata)=='classe')],
+random.forest <- train(training.train[,-c(which(colnames(traindata)=='classe'))],
                        training.train$classe,
                        tuneGrid=data.frame(mtry=3),
                        trControl=trainControl(method="none")
@@ -78,6 +78,17 @@ random.forest <- train(training.train[,which(colnames(traindata)=='classe')],
 
 ## Diagnosis and Evaluation
 
+``` {r, machinelearn, echo=TRUE, eval=TRUE}
+summary(random.forest)
+
+# confusion matrix
+confusionMatrix(predict(random.forest,
+                        newdata=training.test[,-c(which(colnames(traindata)=='classe'))]
+                ),
+                training.test$classe
+                )
+
+```
 ## Prediction on TestData
 
 ## Reference
