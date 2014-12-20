@@ -78,7 +78,7 @@ random.forest <- train(training.train[,-c(which(colnames(traindata)=='classe'))]
 
 ## Diagnosis and Evaluation
 
-``` {r, machinelearn, echo=TRUE, eval=TRUE}
+``` {r, evalmachinelearn, echo=TRUE, eval=TRUE}
 summary(random.forest)
 
 # confusion matrix
@@ -88,6 +88,7 @@ confusionMatrix(predict(random.forest,
                 training.test$classe
                 )
 
+plot(varImp(random.forest))
 ```
 ## Prediction on TestData
 
