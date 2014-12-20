@@ -43,7 +43,7 @@ traindata <- traindata[,-redudantcols]
 # intersection of column names from train and test data
 cmn <- intersect(names(traindata),names(testdata))
 traindata <- traindata[,cmn]
-testdata <- traindata[, cmn]
+testdata <- testdata[, cmn]
 traindata <- traindata[,-c(which(colnames(traindata)=='X'))]
 testdata <- testdata[,-c(which(colnames(testdata)=='X'))]
 # add back the result
